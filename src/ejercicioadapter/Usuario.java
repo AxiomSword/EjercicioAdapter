@@ -5,9 +5,9 @@ import java.util.ArrayList;
 public abstract class Usuario {
     protected static ArrayList<Usuario> usuarios = new ArrayList<Usuario>();
     
-    private String nombre;
-    private String correo;
-    private String contraseña;
+    protected String nombre;
+    protected String correo;
+    protected String contraseña;
     
     abstract public void adicionar();
     abstract public void modificar();

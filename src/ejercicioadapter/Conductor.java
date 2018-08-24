@@ -13,6 +13,7 @@ public class Conductor extends Usuario {
         this.setCorreo(JOptionPane.showInputDialog("Ingrese el correo institucional: "));
         this.setContraseña(JOptionPane.showInputDialog("Ingrese la contraseña: "));
         Usuario.usuarios.add(this);
+        JOptionPane.showMessageDialog(null, "El conductor se ha adicionado exitósamente.");
     }
 
     @Override
@@ -26,6 +27,7 @@ public class Conductor extends Usuario {
                 Usuario.usuarios.get(i).setNombre(JOptionPane.showInputDialog("Ingrese el nuevo nombre: "));
                 Usuario.usuarios.get(i).setContraseña(JOptionPane.showInputDialog("Ingrese la nueva contraseña: "));
                 encontrado = true;
+                JOptionPane.showMessageDialog(null, "El conductor se ha modificado correctamente.");
             }
         } 
         

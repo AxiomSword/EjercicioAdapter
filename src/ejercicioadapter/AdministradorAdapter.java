@@ -1,5 +1,7 @@
 package ejercicioadapter;
 
+import javax.swing.JOptionPane;
+
 public class AdministradorAdapter extends Usuario {
     private Administrador administrador;
 
@@ -15,11 +17,13 @@ public class AdministradorAdapter extends Usuario {
         this.setCorreo(this.administrador.getCorreo());
         this.setContraseña(this.administrador.getContraseña());
         Usuario.usuarios.add(this);
+        JOptionPane.showMessageDialog(null, "El administrador se ha ADAPTADO y adicionado correctamente.");
     }
 
     @Override
     public void modificar() {
         this.administrador.actualizar();
+        JOptionPane.showMessageDialog(null, "El administrador se ha ADAPTADO y modificado correctamente.");
     }
 
     @Override
