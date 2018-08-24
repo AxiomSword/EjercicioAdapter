@@ -7,18 +7,22 @@ public class Pasajero extends Usuario {
         super();
     }
 
+    String mensaje;
+    
     @Override
-    public void adicionar() {
-        this.setNombre(JOptionPane.showInputDialog("Ingrese el nombre: "));
-        this.setCorreo(JOptionPane.showInputDialog("Ingrese el correo institucional: "));
-        this.setContraseña(JOptionPane.showInputDialog("Ingrese la contraseña: "));
-        Usuario.usuarios.add(this);
-        JOptionPane.showMessageDialog(null, "El pasajero se ha adicionando exitósamente.");
+    public String adicionar(String nombre, String correo, String contraseña) {
+        Pasajero pasajero= new Pasajero();
+        pasajero.setNombre(nombre);
+        pasajero.setCorreo(correo);
+        pasajero.setContraseña(contraseña);
+        Usuario.usuarios.add(pasajero);
+        
+       return mensaje = "El pasajero se ha adicionando exitósamente.";
     }
-
+    
     @Override
-    public void modificar() {
-        String correo = JOptionPane.showInputDialog("Ingrese el correo del pasajero que desea modificar: ");
+    public String modificar(String correo) {
+        
         boolean encontrado = false;
         
         for (int i = 0; i < Usuario.usuarios.size(); i++) {
@@ -27,40 +31,42 @@ public class Pasajero extends Usuario {
                 Usuario.usuarios.get(i).setNombre(JOptionPane.showInputDialog("Ingrese el nuevo nombre: "));
                 Usuario.usuarios.get(i).setContraseña(JOptionPane.showInputDialog("Ingrese la nueva contraseña: "));
                 encontrado = true;
-                JOptionPane.showMessageDialog(null, "El pasajero se ha modificado correctamente.");
+                mensaje = "El pasajero se ha modificado correctamente.";
             }
         } 
+        if (!encontrado){
+            mensaje = "No se encontró ningún pasajero con ese correo.";
+        }     
+        return mensaje;
         
-        if (!encontrado) System.out.println("No se encontró ningún pasajero con ese correo.");
     }
 
-    @Override
-    public void consultar() {
-        boolean hayPasajeros = false;
+       @Override
+    public String consultar() {
+        boolean hayConductores = false;
         
         for (int i = 0; i < Usuario.usuarios.size(); i++) {
             if (Usuario.usuarios.get(i) instanceof Pasajero) {
-                hayPasajeros = true;
+                hayConductores = true;
             }
         }
         
-        if (!hayPasajeros) {
-            System.out.println("No hay ningún pasajero registrado.");
-            return;
+        if (!hayConductores) {
+            mensaje = "No hay ningún Pasajero registrado.";
         }
         
-        System.out.println("Pasajeros: ");
+        mensaje = "Pasajeros: \n";
         
         for (int i = 0; i < Usuario.usuarios.size(); i++) {
             if (Usuario.usuarios.get(i) instanceof Pasajero) {
-                System.out.println(Usuario.usuarios.get(i).toString());
+                mensaje = mensaje+ Usuario.usuarios.get(i).toString() + "\n";
             }
         }
+        return mensaje;
     }
 
-    @Override
-    public void eliminar() {
-        String correo = JOptionPane.showInputDialog("Ingrese el correo del pasajero que desea eliminar: ");
+       @Override
+    public String eliminar(String correo) {
         boolean encontrado = false;
         
         for (int i = 0; i < Usuario.usuarios.size(); i++) {
@@ -68,13 +74,15 @@ public class Pasajero extends Usuario {
                 && Usuario.usuarios.get(i).getCorreo().equals(correo)) {
                 Usuario.usuarios.remove(i);
                 encontrado = true;
-                System.out.println("Pasajero eliminado exitósamente.");
+                mensaje = "Pasajero eliminado exitósamente.";
             }
         }
         
-        if (!encontrado) System.out.println("No se encontró ningún pasajero con ese correo.");
+        if (!encontrado) mensaje = "No se encontró ningún Pasajero con ese correo.";
+        
+        return mensaje;
     }
-    
+
     @Override
     public String toString() {
         return this.getNombre() + " - " + this.getCorreo();

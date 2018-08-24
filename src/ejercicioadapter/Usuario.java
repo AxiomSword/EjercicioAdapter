@@ -5,14 +5,14 @@ import java.util.ArrayList;
 public abstract class Usuario {
     protected static ArrayList<Usuario> usuarios = new ArrayList<Usuario>();
     
-    protected String nombre;
-    protected String correo;
-    protected String contraseña;
+    private String nombre;
+    private String correo;
+    private String contraseña;
     
-    abstract public void adicionar();
-    abstract public void modificar();
-    abstract public void consultar();
-    abstract public void eliminar();
+    abstract public String adicionar(String nombre, String correo, String contraseña);
+    abstract public String modificar(String correo);
+    abstract public String consultar();
+    abstract public String eliminar(String correo);
 
     public String getNombre() {
         return nombre;
