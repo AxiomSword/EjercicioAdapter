@@ -1,86 +1,107 @@
 package ejercicioadapter;
 
-import javax.swing.JOptionPane;
-
 public class AdministradorAdapter extends Usuario {
-    private Administrador administrador;
-    String mensaje;
 
-    public AdministradorAdapter() {
-        super();
-        this.administrador = new Administrador();
-    }
-    
-    @Override
-    public String adicionar(String nombre, String correo, String contraseña) {
-        this.setNombre(nombre);
-        this.setCorreo(correo);
-        this.setContraseña(contraseña);
-        Usuario.usuarios.add(this);
-        this.administrador.crear();
-        return "Se ha adicionado un administrador exitósamente.";
-    }
+  private Administrador administrador;
 
-    @Override
-    public String modificar(String correo) {
-        boolean encontrado = false;
+  public AdministradorAdapter() {
+    super();
+    this.administrador = new Administrador();
+  }
 
-        for (int i = 0; i < Usuario.usuarios.size(); i++) {
-            /* ¿Cómo sé que un usuario es administrador en el ArrayList de usuarios? */
-            if (!(Usuario.usuarios.get(i) instanceof Conductor)
-                    && !(Usuario.usuarios.get(i) instanceof Pasajero)
-                    && Usuario.usuarios.get(i).getCorreo().equals(correo)) {
-                Usuario.usuarios.get(i).setNombre(JOptionPane.showInputDialog("Ingrese el nuevo nombre: "));
-                Usuario.usuarios.get(i).setContraseña(JOptionPane.showInputDialog("Ingrese la nueva contraseña: "));
-                encontrado = true;
-            }
-        }
+  @Override
+  public String adicionar(String nombre, String correo, String contraseña) {
+    this.administrador.crear();
 
-        if (!encontrado) {
-            System.out.println("No se encontró ningún administrador con ese correo.");
-        }
-        
-        this.administrador.actualizar();
-        return "El administrador se ha ADAPTADO y modificado correctamente.";
+    boolean correoYaExiste = false;
+
+    for (Usuario usuario : this.getUsuarios()) {
+      if (usuario instanceof AdministradorAdapter
+              && usuario.getCorreo().equals(correo)) {
+        correoYaExiste = true;
+      }
     }
 
-    @Override
-    public String consultar() {
-        boolean hayAdministradores = false;
+    if (correoYaExiste) {
+      return correo + " ya está registrado como administrador.";
+    } else {
+      this.setNombre(nombre);
+      this.setCorreo(correo);
+      this.setContraseña(contraseña);
+      Usuario.usuarios.add(this);
 
-        for (int i = 0; i < Usuario.usuarios.size(); i++) {
-            /* ¿Cómo sé que un usuario es administrador en el ArrayList de usuarios? */
-            if (!(Usuario.usuarios.get(i) instanceof Conductor)
-                    && !(Usuario.usuarios.get(i) instanceof Pasajero)) {
-                hayAdministradores = true;
-            }
-        }
+      return "Se ha adicionado un administrador exitósamente.";
+    }
+  }
 
-        if (!hayAdministradores) {
-            System.out.println("No hay ningún administrador registrado.");
-            return;
-        }
+  @Override
+  public String modificar(String correo, String nombre, String contraseña) {
+    this.administrador.actualizar();
 
-        System.out.println("Administradores: ");
+    boolean encontrado = false;
 
-        for (int i = 0; i < Usuario.usuarios.size(); i++) {
-            /* ¿Cómo sé que un usuario es administrador en el ArrayList de usuarios? */
-            if (!(Usuario.usuarios.get(i) instanceof Conductor)
-                    && !(Usuario.usuarios.get(i) instanceof Pasajero)) {
-                System.out.println(Usuario.usuarios.get(i).toString());
-            }
-        }
-        
-        this.administrador.listar();
+    for (Usuario usuario : this.getUsuarios()) {
+      if (usuario instanceof AdministradorAdapter
+              && usuario.getCorreo().equals(correo)) {
+        encontrado = true;
+        usuario.setNombre(nombre);
+        usuario.setContraseña(contraseña);
+      }
     }
 
-    @Override
-    public void eliminar() {
-        this.administrador.quitar();
+    if (!encontrado) {
+      return "No se encontró ningún administrador con ese correo.";
+    } else {
+      return "El administrador se ha modificado correctamente.";
     }
-    
-    @Override
-    public String toString() {
-        return this.getNombre() + " - " + this.getCorreo();
+  }
+
+  @Override
+  public String consultar() {
+    this.administrador.listar();
+
+    String mensaje = "";
+    boolean hayAdministradores = false;
+
+    for (Usuario usuario : this.getUsuarios()) {
+      if (usuario instanceof AdministradorAdapter) {
+        hayAdministradores = true;
+        mensaje += "NOMBRE: " + usuario.getNombre() + " - CORREO: " + usuario.getCorreo() + "\n";
+      }
     }
+
+    if (!hayAdministradores) {
+      mensaje = "No hay ningún administrador registrado.";
+    } else {
+      mensaje = "Administradores registrados: \n\n" + mensaje;
+    }
+
+    return mensaje;
+  }
+
+  @Override
+  public String eliminar(String correo) {
+    this.administrador.quitar();
+
+    boolean encontrado = false;
+
+    for (int i = 0; i < this.getUsuarios().size(); i++) {
+      if (this.getUsuarios().get(i) instanceof AdministradorAdapter
+              && this.getUsuarios().get(i).getCorreo().equals(correo)) {
+        encontrado = true;
+        this.getUsuarios().remove(i);
+      }
+    }
+
+    if (!encontrado) {
+      return "No se encontró ningún administrador con ese correo.";
+    } else {
+      return "Administrador eliminado exitósamente.";
+    }
+  }
+
+  @Override
+  public String toString() {
+    return this.getNombre() + " - " + this.getCorreo();
+  }
 }
